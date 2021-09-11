@@ -5,22 +5,46 @@
         <div>
           <img src="./../assets/logo.png" alt="" />
         </div>
-        <input type="email" required placeholder="이메일" />
+        <input type="email" v-model="email" required placeholder="이메일" />
       </li>
       <li>
         <div>
           <img src="./../assets/logo.png" alt="" />
         </div>
-        <input type="password" required placeholder="비밀번호" />
+        <input
+          type="password"
+          v-model="password"
+          required
+          placeholder="비밀번호"
+        />
       </li>
     </ul>
-    <button id="signup-button" class="big-button">회원가입</button>
+    <button id="signup-button" class="big-button" @click="onClickSignUp">
+      회원가입
+    </button>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "SignUp",
+  data() {
+    return {
+      email: "",
+      password: "",
+    };
+  },
+  methods: {
+    async onClickSignUp() {
+      console.log(this.email);
+      const res = await axios.post("/api/auth", {
+        email: this.email,
+        password: this.password,
+      });
+      console.log(res);
+    },
+  },
 };
 </script>
 

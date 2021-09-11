@@ -23,7 +23,7 @@
       <div><input type="checkbox" id="login-save" />로그인 정보 저장</div>
       <a href="#">계정 찾기</a>
     </div>
-    <button id="login-button" class="big-button" @click="onClickLoginButton">
+    <button id="login-button" class="big-button" @click="onClickLogin">
       로그인
     </button>
     <router-link to="/auth/sign-up">
@@ -34,6 +34,7 @@
 
 <script>
 import { mapGetters, mapMutations } from "vuex";
+import axios from "axios";
 
 export default {
   name: "LogIn",
@@ -45,9 +46,19 @@ export default {
   },
   methods: {
     ...mapMutations(["setIsAuth", "setUser"]),
-    onClickLoginButton() {
+    async onClickLogin() {
       // 인증
-
+      const loginRes = await axios
+        .post("/api/auth/login", {
+          email: this.email,
+          password: this.password,
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("로그인 실패");
+          return false;
+        });
+      console.log(loginRes);
       // 성공 시 세션에 인증 정보 저장
       // redirect to '/'
       if (!this.getIsAuth) {
@@ -55,10 +66,6 @@ export default {
         this.setUser({ email: this.email, nick: "Jin", id: 0 });
         this.$router.push("/");
         return true;
-      } else {
-        // 실패 시
-        alert("already logged in");
-        return false;
       }
     },
   },
