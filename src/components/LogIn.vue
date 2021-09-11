@@ -5,13 +5,18 @@
         <div>
           <img src="./../assets/logo.png" alt="" />
         </div>
-        <input type="email" required placeholder="이메일" />
+        <input type="email" v-model="email" required placeholder="이메일" />
       </li>
       <li>
         <div>
           <img src="./../assets/logo.png" alt="" />
         </div>
-        <input type="password" required placeholder="비밀번호" />
+        <input
+          type="password"
+          v-model="password"
+          required
+          placeholder="비밀번호"
+        />
       </li>
     </ul>
     <div id="menu-box">
@@ -28,21 +33,26 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "LogIn",
-  props: {
-    msg: String,
+  data() {
+    return {
+      email: "",
+      password: "",
+    };
   },
   methods: {
+    ...mapMutations(["setIsAuth", "setUser"]),
     onClickLoginButton() {
       // 인증
 
       // 성공 시 세션에 인증 정보 저장
       // redirect to '/'
       if (!this.getIsAuth) {
-        this.$store.commit("setIsAuth", true);
+        this.setIsAuth(true);
+        this.setUser({ email: this.email, nick: "Jin", id: 0 });
         this.$router.push("/");
         return true;
       } else {

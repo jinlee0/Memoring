@@ -1,5 +1,7 @@
 <template>
-  <div id="main"></div>
+  <div id="main">
+    <span>{{ getUserNick + " " + getUserEmail + getUserId }}</span>
+  </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
@@ -12,7 +14,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getIsAuth"]),
+    ...mapGetters(["getIsAuth", "getUserNick", "getUserEmail", "getUserId"]),
     isLoggedIn() {
       return this.userId != null;
     },
