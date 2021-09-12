@@ -30,7 +30,6 @@ app.use((err, req, res, next) => {
   console.log(next);
 })
 
-app.use('/api', require('./routes'));
 app.use('/api/auth', require('./routes/auth'));
 
 app.listen(app.get('port'), () => {
