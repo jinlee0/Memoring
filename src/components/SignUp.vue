@@ -5,7 +5,13 @@
         <div>
           <img src="./../assets/logo.png" alt="" />
         </div>
-        <input type="email" v-model="email" required placeholder="이메일" />
+        <input
+          type="email"
+          v-model="email"
+          required
+          placeholder="이메일"
+          @keypress.enter="onKeyPressEnter"
+        />
       </li>
       <li>
         <div>
@@ -16,6 +22,7 @@
           v-model="password"
           required
           placeholder="비밀번호"
+          @keypress.enter="onKeyPressEnter"
         />
       </li>
     </ul>
@@ -35,7 +42,7 @@ export default {
     };
   },
   methods: {
-    async onClickSignUp() {
+    onClickSignUp() {
       this.$store
         .dispatch("signup", {
           email: this.email,
@@ -47,8 +54,14 @@ export default {
           }
         })
         .catch((err) => {
-          alert(err.msg);
+          if (err.response) {
+            alert(err.response.data.msg);
+          }
         });
+    },
+    onKeyPressEnter() {
+      // validation 추가... vee-
+      this.onClickSignUp();
     },
   },
 };
