@@ -12,6 +12,8 @@ const checkAuth = required => (to, from, next) => {
     next("/auth/log-in");
   }
 }
+import Main from "../views/Main.vue";
+import Auth from "../views/Auth.vue";
 
 export default new VueRouter({
   mode: "history",
@@ -19,13 +21,13 @@ export default new VueRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('../components/Main.vue'),
+      component: Main,
       beforeEnter: checkAuth(true),
     },
     {
       path: '/auth/:path',
       name: 'auth',
-      component: () => import('../components/Auth.vue'),
+      component: Auth,
       props: true,
       beforeEnter: checkAuth(false),
     },
