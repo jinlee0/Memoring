@@ -11,6 +11,15 @@ router.post('/join', async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
+    if (!email || !password) {
+      return res.status(400).json({ msg: "email, password required" });
+    }
+
+    const exUser = await User.findOne({ email });
+    if (exUser) {
+      return res.status(400).json({ msg: "already exist email" });
+    }
+
     const hash = bcrypt.hashSync(password, 12);
     const user = await User.create({
       email,
