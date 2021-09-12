@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
   name: "SignUp",
   data() {
@@ -37,12 +36,19 @@ export default {
   },
   methods: {
     async onClickSignUp() {
-      console.log(this.email);
-      const res = await axios.post("/api/auth", {
-        email: this.email,
-        password: this.password,
-      });
-      console.log(res);
+      this.$store
+        .dispatch("signup", {
+          email: this.email,
+          password: this.password,
+        })
+        .then((res) => {
+          if (res.status == 201) {
+            this.$router.push({ name: "home" });
+          }
+        })
+        .catch((err) => {
+          alert(err.msg);
+        });
     },
   },
 };

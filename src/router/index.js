@@ -1,16 +1,34 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-
-import Main from './../components/Main.vue';
-import Auth from './../components/Auth.vue';
+import store from '../store';
 
 Vue.use(VueRouter);
 
+const checkAuth = required => (to, from, next) => {
+  const isAuth = store.getters["isAuth"];
+  if ((isAuth && required) || (!isAuth && !required)) {
+    return next();
+  } else {
+    next("/auth/log-in");
+  }
+}
 
 export default new VueRouter({
   mode: "history",
   routes: [
-    { path: '/', component: Main },
-    { path: '/auth/:path', component: Auth, props: true }
+    {
+      path: '/',
+      name: 'home',
+      component: () => import('../components/Main.vue'),
+      beforeEnter: checkAuth(true),
+    },
+    {
+      path: '/auth/:path',
+      name: 'auth',
+      component: () => import('../components/Auth.vue'),
+      props: true,
+      beforeEnter: checkAuth(false),
+    },
+
   ]
 })

@@ -33,9 +33,6 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
-import axios from "axios";
-
 export default {
   name: "LogIn",
   data() {
@@ -45,33 +42,23 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setIsAuth", "setUser"]),
-    async onClickLogin() {
-      // 인증
-      const loginRes = await axios
-        .post("/api/auth/login", {
+    onClickLogin() {
+      this.$store
+        .dispatch("login", {
           email: this.email,
           password: this.password,
         })
+        .then((res) => {
+          if (res.status == 200) {
+            this.$router.push({ name: "home" });
+          }
+        })
         .catch((err) => {
-          console.error(err);
-          alert("로그인 실패");
-          return false;
+          alert(err.msg);
         });
-      console.log(loginRes);
-      // 성공 시 세션에 인증 정보 저장
-      // redirect to '/'
-      if (!this.getIsAuth) {
-        this.setIsAuth(true);
-        this.setUser({ email: this.email, nick: "Jin", id: 0 });
-        this.$router.push("/");
-        return true;
-      }
     },
   },
-  computed: {
-    ...mapGetters(["getIsAuth"]),
-  },
+  computed: {},
 };
 </script>
 
